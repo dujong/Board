@@ -25,7 +25,7 @@ public class BbsDAO {
 	}	
 	
 	public String getDate() {
-		String query = "select now()";
+		String query = "select SYSDATE FROM DUAL";
 		try {
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
@@ -63,41 +63,66 @@ public class BbsDAO {
 	}
 	
 	public int write(String bbsTitle, String userID ,String bbsContent) {
-		String query = "INSERT INTO BBS VALUES(?,?,?,?,?,?)";
+		String query = "INSERT INTO BBS VALUES(?,?,BBS_seq.nextval,?,?,?)";
 		try {
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query); 
 			pstmt.setInt(1, getNext());
 			pstmt.setString(2, bbsTitle);
-			pstmt.setString(3, userID);
-			pstmt.setString(4, getDate());
-			pstmt.setString(5,bbsContent);
-			pstmt.setInt(6, 1);
-			return pstmt.executeUpdate(); //성공적으로 첫번째 게시물을 가져왔을때
+			pstmt.setString(3, getDate());
+			pstmt.setString(4,bbsContent);
+			pstmt.setInt(5, 1);
+			return pstmt.executeUpdate();
+		
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1; // 실패했을때
+		return 0;
 	}
-	
+	 
 	public ArrayList<Bbs> getlist(int pageNumber){
-		String query = "SELECT FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC LIMIT 10";
+		String query = "SELECT * FROM(SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC) WHERE ROWNUM <10";
 		ArrayList<Bbs> list = new ArrayList<Bbs>();
 		try {
-			PreparedStatement pstmt;
-			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1,getNext() - (pageNumber-1)*10 );
+			PreparedStatement pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1,getNext() - (pageNumber-1) * 10 );
 			rs = pstmt.executeQuery();
 			
 			while(rs.next())
 			{
 				Bbs bbs = new Bbs();
 				bbs.setBbsID(rs.getInt(1));
-			}
-			return ; //성공적으로 첫번째 게시물을 가져왔을때
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserID(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5)); 
+				bbs.setBbsAvailable(rs.getInt(6));
+				list.add(bbs);
+			} //성공적으로 첫번째 게시물을 가져왔을때
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return -1; // 실패했을때
+		return list; // 실패했을때
 	}
+	
+	public boolean nextPage(int pageNumber) {
+		String query = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1";
+		
+		try {
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1,getNext() - (pageNumber-1)*10 );
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				return true;
+			} //성공적으로 첫번째 게시물을 가져왔을때
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false; // 실패했을때
+	}
+	
+	
 }
