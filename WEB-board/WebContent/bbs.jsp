@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="css/bootstrap.css">
 <title>JSP 게시판  웹사이트</title>
 <style type="text/css">
-	a, a:hover{
+	a{
 	color: #000000;
 	text-decoration: none;
 	}
@@ -95,13 +95,13 @@
 				<tbody>
 				<%
 					BbsDAO bbsDAO  = new BbsDAO();
-					ArrayList<Bbs> list = bbsdao.getlist(pageNumber);
+					ArrayList<Bbs> list = bbsDAO.getlist(pageNumber);
 					for(int i = 0; i<list.size(); i++)
 					{
 				%>
 					<tr>
 						<td><%= list.get(i).getBbsID() %></td>
-						<td><a href="view.jsp?bbsID= <%=list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a></td>
+						<td><a href="view.jsp?bbsID=<%=list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle() %></a></td>
 						<td><%= list.get(i).getUserID() %></td>
 						<td><%= list.get(i).getBbsDate() %></td>
 					</tr>
@@ -111,15 +111,15 @@
 				</tbody>
 			</table>
 			<%
-				if(pageNumber !=1){
+				if(pageNumber != 1){
 			%>
-					<a href="bbs.jsp?pageNumber=pageNumber=<%=pageNumber -1%>" class="btn btn-success btn-arraw-left">이전</a>
+					<a href="bbs.jsp?pageNumber=<%=pageNumber -1%>" class="btn btn-success btn-arraw-left">이전</a>
 				
 				<% 
-				}	if(bbsDAO.nextPage(pageNumber+1)){
+				}	if(bbsDAO.nextPage(pageNumber + 1)){
 				%>
 				
-				<a href="bbs.jsp?pageNumber<%=pageNumber + 1%>" class="btn btn-success btn-arraw-left">다음</a>
+				<a href="bbs.jsp?pageNumber=<%=pageNumber + 1%>" class="btn btn-success btn-arraw-left">다음</a>
 				
 				<%
 				}

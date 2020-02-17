@@ -81,11 +81,11 @@ public class BbsDAO {
 	}
 	 
 	public ArrayList<Bbs> getlist(int pageNumber){
-		String query = "SELECT * FROM(SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC) WHERE ROWNUM <10";
+		String query = "SELECT * FROM(SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDER BY bbsID DESC) WHERE ROWNUM <= 10";
 		ArrayList<Bbs> list = new ArrayList<Bbs>();
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1,getNext() - (pageNumber-1) * 10 );
+			pstmt.setInt(1, getNext() - (pageNumber-1) * 10 );
 			rs = pstmt.executeQuery();
 			
 			while(rs.next())
@@ -111,18 +111,42 @@ public class BbsDAO {
 		try {
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1,getNext() - (pageNumber-1)*10 );
+			pstmt.setInt(1,getNext() - (pageNumber-1) * 10 );
 			rs = pstmt.executeQuery();
 			
 			if(rs.next())
 			{
 				return true;
-			} //성공적으로 첫번째 게시물을 가져왔을때
+			}
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false; // 실패했을때
+		return false; 
 	}
 	
-	
+	public Bbs getBbs(int bbsID) {
+	String query = "SELECT * FROM BBS WHERE bbsID = ?";
+		
+		try {
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1,bbsID );
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				Bbs bbs = new Bbs();
+				bbs.setBbsID(rs.getInt(1));
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserID(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5)); 
+				bbs.setBbsAvailable(rs.getInt(6));
+				return bbs;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null; 
+	}
 }
