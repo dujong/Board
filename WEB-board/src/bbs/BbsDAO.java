@@ -133,8 +133,7 @@ public class BbsDAO {
 			pstmt.setInt(1,bbsID );
 			rs = pstmt.executeQuery();
 			
-			if(rs.next())
-			{
+			if(rs.next()){
 				Bbs bbs = new Bbs();
 				bbs.setBbsID(rs.getInt(1));
 				bbs.setBbsTitle(rs.getString(2));
