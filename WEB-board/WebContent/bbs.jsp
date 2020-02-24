@@ -10,6 +10,7 @@
 <meta charset="EUC-KR">
 <meta name="viewport" content="width=device-width"> <!-- 컴퓨터나 핸드폰 어떤 디바이스든지 해상도를 맞추어 준다. --> 
 <link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/custom.css">
 <title>JSP 게시판  웹사이트</title>
 <style type="text/css">
 	a{
@@ -90,6 +91,7 @@
 						<th  style="background-color: #eeeeee; text-align: center;">제목</th>
 						<th  style="background-color: #eeeeee; text-align: center;">작성자</th>
 						<th  style="background-color: #eeeeee; text-align: center;">작성일</th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -101,7 +103,7 @@
 				%>
 					<tr>
 						<td><%= list.get(i).getBbsID() %></td>
-						<td><a href="view.jsp?bbsID=<%=list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle().replaceAll("","&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>;") %></a></td>
+						<td><a href="view.jsp?bbsID=<%=list.get(i).getBbsID()%>"><%= list.get(i).getBbsTitle().replaceAll("","&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>;") %></a></td>
 						<td><%= list.get(i).getUserID() %></td>
 						<td><%= list.get(i).getBbsDate() %></td>
 					</tr>

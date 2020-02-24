@@ -7,6 +7,7 @@
 <meta charset="EUC-KR">
 <meta name="viewport" content="width=device-width" , initial-scale="1"> <!-- 컴퓨터나 핸드폰 어떤 디바이스든지 해상도를 맞추어 준다. --> 
 <link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/custom.css">
 <title>JSP 게시판  웹사이트</title>
 </head>
 <body>

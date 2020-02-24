@@ -63,15 +63,16 @@ public class BbsDAO {
 	}
 	
 	public int write(String bbsTitle, String userID ,String bbsContent) {
-		String query = "INSERT INTO BBS VALUES(?,?,BBS_seq.nextval,?,?,?)";
+		String query = "INSERT INTO BBS VALUES(?,?,?,?,?,?)";
 		try {
 			PreparedStatement pstmt;
 			pstmt = conn.prepareStatement(query); 
 			pstmt.setInt(1, getNext());
 			pstmt.setString(2, bbsTitle);
-			pstmt.setString(3, getDate());
-			pstmt.setString(4,bbsContent);
-			pstmt.setInt(5, 1);
+			pstmt.setString(3, userID);
+			pstmt.setString(4, getDate());
+			pstmt.setString(5,bbsContent);
+			pstmt.setInt(6, 1);
 			return pstmt.executeUpdate();
 		
 		}catch (Exception e) {
@@ -147,5 +148,36 @@ public class BbsDAO {
 			e.printStackTrace();
 		}
 		return null; 
+	}
+	
+	public int update(int bbsID, String bbsTitle, String bbsContent) {
+		
+		String query = "UPDATE BBS SET bbsTitle = ?, bbsContent = ? WHERE bbsID= ?";
+		try {
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query); 
+			pstmt.setString(1, bbsTitle);
+			pstmt.setString(2, bbsContent);
+			pstmt.setInt(3, bbsID);
+			return pstmt.executeUpdate();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	public int delete(int bbsID) {
+		String query = "UPDATE BBS SET bbsAvailable = 0 WHERE bbsID= ?";
+		try {
+			PreparedStatement pstmt;
+			pstmt = conn.prepareStatement(query); 
+			pstmt.setInt(1, bbsID);
+			return pstmt.executeUpdate();
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }
